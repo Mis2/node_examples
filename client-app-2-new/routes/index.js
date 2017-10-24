@@ -111,7 +111,7 @@ router.post("/register", function (req, res) {
     var newAdmin = new Admin(
         {
             username: req.body.username,
-            department: req.body.department,
+            course: req.body.course,
             email: req.body.email,
             full_name: req.body.full_name
         }
