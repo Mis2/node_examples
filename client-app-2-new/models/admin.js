@@ -5,7 +5,7 @@ var AdminSchema = new mongoose.Schema({
     username: String,
     email: String,
     password: String,
-    department: String,
+    course: String,
     full_name: String,
     created_forms: [String]
 });
