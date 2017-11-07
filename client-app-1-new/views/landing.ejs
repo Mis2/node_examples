@@ -52,12 +52,9 @@
             <hr>
             <div class="row">
                 <div class="col-xs-3 col-xs-offset-7">
-                    <% if(currentUser){ %>
-                    <button class="btn btn-primary custom-button btn-sm"><a href="/feedback/<%= forms[i]._id %>">Fill Form Now</a></button>
-                    <% } else { %>
-                    <button class="btn btn-primary custom-button btn-sm"><a href="/feedback/<%= forms[i]._id %>">Fill Form Now</a>
-                    </button>
-                    <% } %>
+                    
+                     <input type="button"><a href="/feedback/<%= forms[i]._id %>"> fill form</a> </input>
+                    
                 </div>
             </div>
         </div>
