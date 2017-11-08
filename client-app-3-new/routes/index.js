@@ -25,70 +25,63 @@ router.get("/", function (req, res) {
 
         // We need to pass the data of reviews to the view
 
-        var createdForms = req.user.created_forms;
-        var formsInSystem = [];
-        var renderData = [];
+        var dept=req.user.department;
+        console.log(dept);
+         request('http://localhost:3000/reviews/target/' + dept, function (error, response, body) {
+            if(error){
+                console.log(error)
+            } else {
+                console.log(response.body);
 
-        console.log("im here");
+                var forms = JSON.parse(body);
+                console.log('awwwwwww');
 
-        // TODO: handle case where createdForms is not consistent with REST API
 
-        // for each created form get the form data, store it in a new array
-        // render the view with that array
+                
+                // filter forms based on filled_forms data
+                
+              /*  var filledFormIds = req.user.filled_forms;
 
-        if (createdForms.length == 0) {
-            res.render("landing", {forms: null});
-        } else {
-            
-            // Get all reviews in system
-            
-            request('http://localhost:3000/reviews', function (error, response) {
-                if (error) {
-                    console.log(error)
-                } else {
-                    console.log(response.body);
-                    var data = JSON.parse(response.body);
-                    console.log(data);
-                    // Getting all forms in system
-                    for (var i = 0; i < data.length; ++i) {
-                        formsInSystem.push(data[i]._id);
-                    }
-                    console.log("forms in system:", formsInSystem);
-                    for (var x = 0; x < createdForms.length; ++x) {
-                        if (inArray(formsInSystem, createdForms[x]) == -1) {
-                            // form does not exist in system
-                            // delete it
-                            createdForms.splice(x, 1);
-                            console.log("deleted inconsistent data");
-
-                            // TODO: delete this data from database too so that next time it runs more efficiently
-                            
+                for(var i=0; i<filledFormIds.length; ++i){
+                    for(var j=0; j<forms.length; ++j){
+                        if(forms[j]._id == filledFormIds[i]){
+                        
+                            // console.log("Matched form is:" + forms[j]._id)
+                            forms.splice(j, 1);
                         }
+                        
                     }
-                    console.log("created forms:", createdForms);
+                }*/
 
-                    if (createdForms.length == 0) {
-                        res.render("landing", {forms: null});
-                    } else {
-                        createdForms.forEach(function (formId, index) {
+                // GET responses data in order to find number of users filled form and ave time
 
-                            request('http://localhost:3000/reviews/' + formId, function (error, response, body) {
-                                if (error) {
-                                    console.log(error);
-                                } else {
-                                    renderData.push(JSON.parse(response.body));
-                                    if (index == createdForms.length - 1) {
-                                        // last form has been pushed
-                                        // data is ready to be rendered
-                                        res.render("landing", {forms: renderData})
-                                    }
-                                }
-                            })
+                request('http://localhost:3000/responses_new/', function (error, response, body) {
+
+                    var responses = JSON.parse(body);
+
+                    forms.forEach(function (form) {
+                        var formId = form._id;
+                        form.noOfUsers = 0;
+                        var noOfQuestions = form.mcq.length;
+                        form.estimatedTime = 0;
+                        responses.forEach(function (response) {
+                            if(response.reviewId == formId){
+                                console.log(formId);
+                                form.noOfUsers += 1;
+
+                                response.mcqResponse.forEach(function(singleResponse){
+                                    form.estimatedTime += singleResponse.timeSpent;
+                                })
+                            }
                         });
-                    }
-                }
-            });
-        }
+                        form.estimatedTime = (form.estimatedTime/form.noOfUsers)/1000;
+                    });
+
+                    console.log("Forms:", forms);
+                    res.render("landing", {forms: forms});
+                });
+            }
+        })
     }
     else {
         res.render("landing", {forms: null});

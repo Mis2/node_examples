@@ -35,39 +35,27 @@
     </div>
     <% } %>
     <br>
-    <% if(forms != null){ %>
-        <div class="row">
-        <% forms.forEach(function (form, index) { %>
-        <div class="created-forms-card col-sm-5 col-sm-offset-1" style="margin-top: 30px">
-            <div class="row created-forms-card-header">
-                <h4>Review No: <%= index+1 %></h4>
-            </div>
-            <div class="row created-forms-date">
-                <i class="fa fa-clock-o"></i>
-                <span>Created At: <span class="bold-text"><%=  Date();%></span></span>
+    <% if( forms != null){
+        for(var i = 0; i < forms.length; ++i){ %>
+        <div class="col-md-5  feedback-card" style="margin-top: 40px;margin-left: 40px">
+            <h4>Feedback Form <%= i+1 %></h4>
+            <hr>
+            <p><i class="fa fa-check"></i>&nbsp; <span class="emphasis-text"><%= forms[i].noOfUsers %></span> people have filled this form</p>
+            <p><i class="fa fa-clock-o"></i>&nbsp; Estimated time: <span class="emphasis-text"><%= Math.round(forms[i].estimatedTime) %> secs</span></p>
+            <p><i class="fa fa-users"></i>&nbsp; Departments:</p>
+            <div style="margin-top: 10px">
+                <% forms[i].targetedUsers.forEach(function (department) { %>
+                <div class="slab"><%= department %></div>
+                <% }) %>
             </div>
             <hr>
-            <div class="row targeted-departments-header">
-                <p>Targeted Departments:</p>
-                <div style="margin-top: 10px">IT
-                    <% form.targetedUsers.forEach(function (department) { %>
-                    <div class="slab"><%= department %></div>
-                    <% }) %>
-                </div>
-            </div>
-            <hr>
-            <div class="row admin-actions">
+            <!--div class="row admin-actions">
                 <div class="col-xs-6 custom-button-login">
-                    <a href="/details/<%= form._id %>"><i class="fa fa-external-link"></i><span>View Details</span></a>
-                </div>
-                <div class="col-xs-4 col-xs-offset-2 custom-button-logout">
-                    <a href="/"><i class="fa fa-trash"></i><span>Delete</span></a>
-                </div>
-            </div>
+                    <a href="/details/<%= forms._id %>"><i class="fa fa-external-link"></i><span>View Details</span></a>
+                </div-->
         </div>
-        <% }) %>
-    </div>
-    <% }%>
+        <% } %>
+        <% } %>
     <br><br><br>
     <!--<% if(currentUser){ %>
         <div class="row">
