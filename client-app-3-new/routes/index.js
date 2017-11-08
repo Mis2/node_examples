@@ -38,49 +38,12 @@ router.get("/", function (req, res) {
 
 
                 
-                // filter forms based on filled_forms data
                 
-              /*  var filledFormIds = req.user.filled_forms;
-
-                for(var i=0; i<filledFormIds.length; ++i){
-                    for(var j=0; j<forms.length; ++j){
-                        if(forms[j]._id == filledFormIds[i]){
-                        
-                            // console.log("Matched form is:" + forms[j]._id)
-                            forms.splice(j, 1);
-                        }
-                        
-                    }
-                }*/
-
-                // GET responses data in order to find number of users filled form and ave time
-
-                request('http://localhost:3000/responses_new/', function (error, response, body) {
-
-                    var responses = JSON.parse(body);
-
-                    forms.forEach(function (form) {
-                        var formId = form._id;
-                        form.noOfUsers = 0;
-                        var noOfQuestions = form.mcq.length;
-                        form.estimatedTime = 0;
-                        responses.forEach(function (response) {
-                            if(response.reviewId == formId){
-                                console.log(formId);
-                                form.noOfUsers += 1;
-
-                                response.mcqResponse.forEach(function(singleResponse){
-                                    form.estimatedTime += singleResponse.timeSpent;
-                                })
-                            }
-                        });
-                        form.estimatedTime = (form.estimatedTime/form.noOfUsers)/1000;
-                    });
 
                     console.log("Forms:", forms);
                     res.render("landing", {forms: forms});
-                });
-            }
+                }
+            
         })
     }
     else {
@@ -151,7 +114,7 @@ router.get("/admins", function (req, res) {
     })
 });
 
-router.put("/admins/:adminId/created_forms", function (req, res) {
+/*router.put("/admins/:adminId/created_forms", function (req, res) {
     console.log("From PUT route", req.body);
     Admin.findById(req.params.adminId, function (err, admin) {
         if (err) {
@@ -177,7 +140,7 @@ router.put("/admins/:adminId/created_forms", function (req, res) {
             }
         });
     });
-});
+});*/
 
 router.get("/details", function (req, res) {
     res.render("view-stats");
@@ -186,12 +149,9 @@ router.get("/details", function (req, res) {
 
 router.get("/details/:reviewId", function (req, res) {
     var reviewId = req.params.reviewId;
-    res.render("view-stats", {reviewId: reviewId});
+    res.render("view-stats", {reviewId:reviewId});
 });
 
 
-router.get("/create_review", function (req, res) {
-    res.render("create-form");
-});
 
 module.exports = router;
