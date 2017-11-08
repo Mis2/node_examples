@@ -28,11 +28,12 @@
     <!--</div>-->
     <hr>
 
+    <% if(currentUser){ %>
     <div class="row created-forms-header">
         <div class="col-xs-4 col-sm-offset-4">
             <p>Created Forms</p>
         </div>
-    </div>
+    </div><% } %>
     <br>
     <% if(forms != null){ %>
         <div class="row">
@@ -75,7 +76,7 @@
             </div>
         </div>
         <br>
-    <% } %>>
+    <% } %>
 
 
 

@@ -55,6 +55,8 @@ app.set("view engine", "ejs");
 
 app.use(function (req, res, next) {
     res.locals.currentUser = req.user;
+    console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+    console.log(res.locals.currentUser);
     next();
 });
 
